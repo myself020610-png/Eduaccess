@@ -1,0 +1,8 @@
+{
+  "name": "EduAccess Core",
+  "description": "An accessibility assistant for students, providing clock-face environmental descriptions for visual impairments and real-time simplified academic summaries for hearing impairments.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
