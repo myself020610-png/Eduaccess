@@ -9,43 +9,47 @@ import { VISION_SYSTEM_PROMPT } from '../constants';
 // --- Audio Cue System ---
 const playAudioCue = (type: 'start' | 'capture' | 'success') => {
   try {
-    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioContext) return;
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
     
-    const ctx = new AudioContext();
+    const ctx = new AudioContextClass();
     if (ctx.state === 'suspended') {
       ctx.resume().catch(() => {});
     }
 
     const now = ctx.currentTime;
-    
+    let duration = 0;
+
     if (type === 'start') {
+      duration = 0.15;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.type = 'sine';
       osc.frequency.setValueAtTime(220, now);
-      osc.frequency.exponentialRampToValueAtTime(440, now + 0.15);
+      osc.frequency.exponentialRampToValueAtTime(440, now + duration);
       gain.gain.setValueAtTime(0.05, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
       osc.start(now);
-      osc.stop(now + 0.15);
+      osc.stop(now + duration);
     } 
     else if (type === 'capture') {
+      duration = 0.1;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(800, now);
-      osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+      osc.frequency.exponentialRampToValueAtTime(100, now + duration);
       gain.gain.setValueAtTime(0.1, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
       osc.start(now);
-      osc.stop(now + 0.1);
+      osc.stop(now + duration);
     } 
     else if (type === 'success') {
+      duration = 0.6;
       const osc1 = ctx.createOscillator();
       const gain1 = ctx.createGain();
       osc1.connect(gain1);
@@ -54,20 +58,31 @@ const playAudioCue = (type: 'start' | 'capture' | 'success') => {
       const gain2 = ctx.createGain();
       osc2.connect(gain2);
       gain2.connect(ctx.destination);
+      
       osc1.type = 'sine';
       osc1.frequency.setValueAtTime(523.25, now); 
       gain1.gain.setValueAtTime(0.05, now);
       gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      
       osc2.type = 'sine';
       osc2.frequency.setValueAtTime(659.25, now + 0.1); 
       gain2.gain.setValueAtTime(0, now);
       gain2.gain.linearRampToValueAtTime(0.05, now + 0.1);
       gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      
       osc1.start(now);
       osc1.stop(now + 0.6);
       osc2.start(now);
       osc2.stop(now + 0.6);
     }
+
+    // CRITICAL: Close context to prevent resource exhaustion
+    setTimeout(() => {
+        if (ctx.state !== 'closed') {
+            ctx.close();
+        }
+    }, (duration + 0.1) * 1000);
+
   } catch (e) {
     // Silently fail
   }
@@ -218,7 +233,7 @@ const VisionAssistant: React.FC = () => {
 
   // Auto-Capture Countdown Effect
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout>;
     if (isCameraActive && cameraReady && countdown !== null && countdown > 0) {
         timer = setTimeout(() => {
             setCountdown(prev => (prev !== null ? prev - 1 : null));
