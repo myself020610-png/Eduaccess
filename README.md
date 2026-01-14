@@ -1,20 +1,50 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1gC-OJ8RptaFSuzlu4vQwEgf5b_xtmQsz
-
-## Run Locally
-
-**Prerequisites:**  Node.js
+Eduaccess
+Empowering Education through Universal Accessibility
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+🌟 Overview
+Eduaccess is a platform designed to bridge the gap in digital education. Our mission is to ensure that learning materials are accessible to everyone, regardless of physical or cognitive abilities. This project was developed for [hackfinity - beyond limits].
+
+
+🚩 The Problem
+Many online educational platforms lack features for students with visual, auditory, impairments, creating a "digital divide" in modern learning.
+
+
+✅ Our Solution
+Eduaccess provides a [web/mobile] interface that integrates [mention 1-2 key features, e.g., AI-driven captions, screen-reader optimization, or simplified UI] to make learning seamless for all.
+
+
+🚀 Key Features
+[Feature 1]: ( Speech-to-Text for live lectures)
+
+[Feature 2]: (High-contrast mode and font scaling for dyslexic users)
+
+[Feature 3]: ( AI Summarization of complex textbooks)
+
+
+APIs/Tools: [Google Gemini API]
+
+
+Installation & Setup
+
+Clone the repository:
+git clone https://github.com/Moizskh024/Eduaccess.git
+
+
+Navigate to the directory:
+cd Eduaccess
+
+
+Install dependencies:
+npm install  
+
+
+Environment Variables: Create a .env file and add your credentials:
+API_KEY=your_key_here
+
+
+Run the application:
+npm start
+Bash
+
+npm start
